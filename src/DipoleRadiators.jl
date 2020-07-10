@@ -6,14 +6,15 @@ using StaticArrays
 using LinearAlgebra
 using Parameters
 using Interpolations
-import PhysicalConstants.CODATA2018: c_0, ε_0, μ_0
 using SpecialFunctions: erf
 using ForwardDiff: derivative
 
 include("cumtrapz.jl")
 include("fieldcomponents.jl")
 
-
+const ε_0 = 8.8541878128e-12
+const c_0 = 2.99792458e8
+    
 abstract type AbstractDipole end
 abstract type AbstractCurrent end
 
