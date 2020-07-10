@@ -151,7 +151,7 @@ end
 
 
 function remotefield(d::AbstractDipole, prop::Propagator, t)
-    @unpack w, τ, m, pulse = d
+    @unpack w, τ, pulse = d
     @unpack Δt, v = prop
     
     #electrostatic, induction, radiation fields
