@@ -155,9 +155,9 @@ function remotefield(d::AbstractDipole, prop::Propagator, t)
     @unpack Δt, v = prop
     
     #electrostatic, induction, radiation fields
-    estat = w * icurrent(pulse, t - τ - Δt) * v.stat
-    eind = w * current(pulse, t - τ - Δt) * v.ind
-    erad = w * dcurrent(pulse, t - τ - Δt) * v.rad
+    estat = w * icurrent(pulse, t - τ - Δt) * v.static
+    eind = w * current(pulse, t - τ - Δt) * v.induction
+    erad = w * dcurrent(pulse, t - τ - Δt) * v.radiation
 
     FieldComponents(estat, eind, erad)
 end
