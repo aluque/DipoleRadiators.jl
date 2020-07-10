@@ -135,9 +135,9 @@ function directionalmats(d::AbstractDipole, robs)
     nn = n * n'
 
     # Electrostatic, induction, radiation fields
-    ((3nn - I) ./ (4π * ϵ_0 * rabs^3),
-     (3nn - I) ./ (4π * ϵ_0 * rabs^2 * c_0),
-     (nn - I) ./ (4π * ϵ_0 * rabs^1 * c_0^2)) 
+    ((3nn - I) ./ (4π * ε_0 * rabs^3),
+     (3nn - I) ./ (4π * ε_0 * rabs^2 * c_0),
+     (nn - I) ./ (4π * ε_0 * rabs^1 * c_0^2)) 
 end
 
 
