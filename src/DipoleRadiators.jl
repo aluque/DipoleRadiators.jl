@@ -49,7 +49,6 @@ function image(dip::TLDipole)
              @SVector([-dip.l[1], -dip.l[2], dip.l[3]]),
              dip.w,
              dip.τ,
-             dip.m,
              dip.pulse)
 end
 
