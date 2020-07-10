@@ -27,13 +27,13 @@ ind(f::FieldComponents) = f.ind
 rad(f::FieldComponents) = f.rad
 
 # Go-through functions
-total(v::Vector{FieldComponents})  = hcat([total(f) for f in v]...)
-stat(v::Vector{FieldComponents})  = hcat([stat(f) for f in v]...)
-ind(v::Vector{FieldComponents})  = hcat([ind(f) for f in v]...)
-rad(v::Vector{FieldComponents})  = hcat([rad(f) for f in v]...)
+total(v::Vector{<:FieldComponents})  = hcat([total(f) for f in v]...)
+stat(v::Vector{<:FieldComponents})  = hcat([stat(f) for f in v]...)
+ind(v::Vector{<:FieldComponents})  = hcat([ind(f) for f in v]...)
+rad(v::Vector{<:FieldComponents})  = hcat([rad(f) for f in v]...)
 
-stat(v::Vector{FieldComponents}, i::Int)  = [stat(f)[i] for f in v]
-ind(v::Vector{FieldComponents}, i::Int)  = [ind(f)[i] for f in v]
-rad(v::Vector{FieldComponents}, i::Int)  = [rad(f)[i] for f in v]
-total(v::Vector{FieldComponents}, i::Int)  =[stat(f)[i] + ind(f)[i] + rad(f)[i]
+stat(v::Vector{<:FieldComponents}, i::Int)  = [stat(f)[i] for f in v]
+ind(v::Vector{<:FieldComponents}, i::Int)  = [ind(f)[i] for f in v]
+rad(v::Vector{<:FieldComponents}, i::Int)  = [rad(f)[i] for f in v]
+total(v::Vector{<:FieldComponents}, i::Int)  =[stat(f)[i] + ind(f)[i] + rad(f)[i]
                                              for f in v]
