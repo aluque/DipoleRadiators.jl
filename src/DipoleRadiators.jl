@@ -18,7 +18,6 @@ abstract type AbstractDipole end
 abstract type AbstractCurrent end
 
 
-
 """
 Almost-general dipole element of a transmission line.  It includes a location
 `r`, a vector to the endpoint `d`, an attenuation factor `w` and a delay time
@@ -300,7 +299,4 @@ function fields(tpl::Tuple, robs, t)
 end
 
 
-    
-end
-                   
 end # module
