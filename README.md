@@ -9,7 +9,7 @@ Install this package from the julia prompt with
 
 ```julia
 julia> using Pkg
-julia> Pkg.add("https://github.com/aluque/DipoleRadiators.jl")
+julia> Pkg.add(url="https://github.com/aluque/DipoleRadiators.jl")
 ```
 
 This packages has been tested with julia versions 1.5, 1.6 and 1.7. Higher versions should work too.
