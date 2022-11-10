@@ -1,6 +1,7 @@
 module DipoleRadiators
 
 export fields, total, mtle, BiGaussianCurrent, CurrentPulse, TLDipole, image
+export SplineCurrent
 
 using StaticArrays
 using LinearAlgebra
@@ -8,6 +9,7 @@ using Parameters
 using Interpolations
 using SpecialFunctions: erf
 using ForwardDiff: derivative
+import Dierckx
 
 include("cumtrapz.jl")
 include("fieldcomponents.jl")
@@ -257,6 +259,28 @@ function icurrent(pulse::BiGaussianCurrent{T}, t) where T
     @unpack I0, τ1, τ2 = pulse
     0.5 * sqrt(π) * I0 * (τ1 * erf(t / τ1) + τ2 * erf(t / τ2))
 end
+
+
+"""
+A current pulse with a profile given by discrete times and values.
+The integral and derivative are then computed numerically.
+"""
+struct SplineCurrent <: AbstractCurrent
+    curr::Dierckx.Spline1D
+
+    tmin::Float64
+    tmax::Float64
+end
+
+function SplineCurrent(t, i)
+    tmin, tmax = extrema(t)
+    SplineCurrent(Dierckx.Spline1D(t, i), tmin, tmax)    
+end
+
+
+current(p::SplineCurrent, t) = (p.tmin < t < p.tmax) ? p.curr(t) : 0.0
+dcurrent(p::SplineCurrent, t) = (p.tmin < t < p.tmax) ? Dierckx.derivative(p.curr, t) : 0.0
+icurrent(p::SplineCurrent, t) = Dierckx.integrate(p.curr, p.tmin, clamp(t, p.tmin, p.tmax))
 
 
 function fields(tl::AbstractVector{<:AbstractDipole}, robs, t)
