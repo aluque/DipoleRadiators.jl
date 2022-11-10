@@ -47,15 +47,15 @@ end
 pos(dip::TLDipole) = dip.r
 vec(dip::TLDipole) = dip.l
 
-function image(dip::TLDipole)
-    TLDipole(@SVector([dip.r[1], dip.r[2], -dip.r[3]]),
+function image(dip::TLDipole, z=0)
+    TLDipole(@SVector([dip.r[1], dip.r[2], 2 * z - dip.r[3]]),
              @SVector([-dip.l[1], -dip.l[2], dip.l[3]]),
              dip.w,
              dip.τ,
              dip.pulse)
 end
 
-image(tl::Vector{<:AbstractDipole}) = [image(d) for d in tl]
+image(tl::Vector{<:AbstractDipole}, z=0) = [image(d, z) for d in tl]
 
 
 """
