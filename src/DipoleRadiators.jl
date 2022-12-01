@@ -45,7 +45,7 @@ end
 
 
 pos(dip::TLDipole) = dip.r
-vec(dip::TLDipole) = dip.l
+lvec(dip::TLDipole) = dip.l
 
 function image(dip::TLDipole, z=0)
     TLDipole(@SVector([dip.r[1], dip.r[2], 2 * z - dip.r[3]]),
@@ -117,9 +117,9 @@ end
 
 function Propagator(d::AbstractDipole, robs::AbstractVector)
     mats = directionalmats(d, robs)
-    v = FieldComponents(mats[1] * vec(d),
-                        mats[2] * vec(d),
-                        mats[3] * vec(d))
+    v = FieldComponents(mats[1] * lvec(d),
+                        mats[2] * lvec(d),
+                        mats[3] * lvec(d))
     Δt = proptime(d, robs)
     Propagator(v, Δt)
 end
