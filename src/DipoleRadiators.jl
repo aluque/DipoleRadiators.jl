@@ -23,7 +23,7 @@ abstract type AbstractCurrent end
 
 """
 Almost-general dipole element of a transmission line.  It includes a location
-`r`, a vector to the endpoint `d`, an attenuation factor `w` and a delay time
+`r`, a length vector `l`, an attenuation factor `w` and a delay time
 `τ` as well as an instance of the current with τ=0 and w=1.
 """
 struct TLDipole{T,I} <: AbstractDipole
@@ -33,7 +33,7 @@ struct TLDipole{T,I} <: AbstractDipole
     # Vector from r to the end of the dipole
     l::SVector{3, T}
 
-    # Attenuation time
+    # Attenuation factor
     w::T
 
     # Delay time
@@ -78,8 +78,8 @@ function mtle(pulse::AbstractCurrent, r0, r1, v, λ, n;
     d = (r1 .- r0) ./ n
     
     tl = map(1:n) do i
-        # base of the dipole
-        r = r0 .+ (i - 1) .* d
+        # midpoint of the dipole
+        r = r0 .+ (i - .5) .* d
 
         # Distance to the injection point
         s = (i - 1) * L / n
