@@ -19,7 +19,15 @@ function Base.:+(f1::FieldComponents, f2::FieldComponents)
                     f1.induction .+ f2.induction,
                     f1.radiation .+ f2.radiation)
 end
-                    
+
+function Base.:*(a::Real, f::FieldComponents)
+    FieldComponents(a * f.static,
+                    a * f.induction,
+                    a * f.radiation)
+end
+
+Base.:*(f::FieldComponents, a::Real) = a * f
+
 
 total(f::FieldComponents) = f.static .+ f.induction .+ f.radiation
 static(f::FieldComponents) = f.static
