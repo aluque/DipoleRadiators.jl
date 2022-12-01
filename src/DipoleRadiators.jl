@@ -282,18 +282,40 @@ current(p::SplineCurrent, t) = (p.tmin < t < p.tmax) ? p.curr(t) : 0.0
 dcurrent(p::SplineCurrent, t) = (p.tmin < t < p.tmax) ? Dierckx.derivative(p.curr, t) : 0.0
 icurrent(p::SplineCurrent, t) = Dierckx.integrate(p.curr, p.tmin, clamp(t, p.tmin, p.tmax))
 
+# Poor's man implementation of a fill-array
+struct FillOnes; end
+@inline Base.getindex(::FillOnes, k::Int) = 1
 
-function fields(tl::AbstractVector{<:AbstractDipole}, robs, t)
+
+"""
+    Compute the fields created by the transmission line `tl` at observation point `robs`
+    and times in vector `t`.
+"""
+function fields(tl::AbstractVector{<:AbstractDipole}, robs, t, f=FillOnes())
     e = zeros(FieldComponents{eltype(t)}, length(t))
     fields!(e, tl, robs, t)
 end
 
 
-function fields!(e, tl::Vector{<:AbstractDipole}, robs, t)
-    props = [Propagator(d, robs) for d in tl]
-    Threads.@threads for i in eachindex(t)
+"""
+    Compute fields and store them in a pre-allocated array `e`.  Optionally `f` multiplies
+    the effect of the dipole with index `i` in the line by a factor `f[i]` (defaults to 1).
+    If provided, `props` is a vector with pre-allocated space for `Propagator` instances.
+"""
+function fields!(e, tl::Vector{<:AbstractDipole}, robs, t, f=FillOnes(); props=nothing)
+    if isnothing(props)
+        props = [Propagator(d, robs) for d in tl]
+    else
+        @assert size(tl) == size(props) "props must have the same size as the transmission line"
+
+        for i in eachindex(tl)
+            props[i] = Propagator(tl[i], robs)
+        end
+    end
+    
+    for i in eachindex(t)
         for j in eachindex(tl)
-            e[i] += remotefield(tl[j], props[j], t[i])            
+            e[i] += remotefield(tl[j], props[j], t[i]) * f[j]
         end
     end
     e
